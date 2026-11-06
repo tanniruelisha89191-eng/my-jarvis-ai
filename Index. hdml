@@ -1,0 +1,130 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>JARVIS AI</title>
+
+<style>
+body {
+  background: #020817;
+  color: cyan;
+  font-family: Arial;
+  text-align: center;
+  padding: 20px;
+}
+h1 {
+  margin-top: 50px;
+  font-size: 38px;
+  text-shadow: 0 0 15px cyan;
+}
+.circle {
+  width: 180px;
+  height: 180px;
+  border: 3px solid cyan;
+  border-radius: 50%;
+  margin: 35px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 65px;
+  box-shadow: 0 0 25px cyan;
+}
+button, input {
+  padding: 14px;
+  margin: 8px;
+  border-radius: 10px;
+  border: 1px solid cyan;
+  background: #10243b;
+  color: white;
+}
+#answer {
+  color: white;
+  margin-top: 25px;
+}
+</style>
+</head>
+
+<body>
+
+<h1>J.A.R.V.I.S</h1>
+<p>PERSONAL AI ASSISTANT</p>
+
+<div class="circle">J</div>
+
+<input id="command" placeholder="Ask JARVIS anything">
+
+<br>
+
+<button onclick="startVoice()">🎤 Speak</button>
+<button onclick="runJarvis()">Send</button>
+
+<p id="answer">System online. Hello, Sir!</p>
+
+<script>
+function speak(text) {
+  let voice = new SpeechSynthesisUtterance(text);
+  voice.lang = "en-IN";
+  speechSynthesis.speak(voice);
+}
+
+function runJarvis() {
+  let text = document.getElementById("command").value.toLowerCase();
+  let reply = "I am still learning. Please try another command.";
+
+  if (text.includes("hello")) {
+    reply = "Hello Sir. JARVIS is online.";
+  }
+  else if (text.includes("your name")) {
+    reply = "My name is JARVIS, your personal assistant.";
+  }
+  else if (text.includes("time")) {
+    reply = "The time is " + new Date().toLocaleTimeString();
+  }
+  else if (text.includes("date")) {
+    reply = "Today's date is " + new Date().toLocaleDateString();
+  }
+  else if (text.includes("how are you")) {
+    reply = "I am functioning perfectly, Sir.";
+  }
+  else if (text.includes("bye")) {
+    reply = "Goodbye Sir. JARVIS going offline.";
+  }
+
+  document.getElementById("answer").innerText =
+    "JARVIS: " + reply;
+
+  speak(reply);
+}
+
+function startVoice() {
+  const Speech =
+    window.SpeechRecognition ||
+    window.webkitSpeechRecognition;
+
+  if (!Speech) {
+    alert("Voice recognition is not supported in this browser.");
+    return;
+  }
+
+  let recognition = new Speech();
+  recognition.lang = "en-IN";
+
+  recognition.onresult = function(event) {
+    document.getElementById("command").value =
+      event.results[0][0].transcript;
+    runJarvis();
+  };
+
+  recognition.onerror = function(event) {
+    document.getElementById("answer").innerText =
+      "Voice error: " + event.error;
+  };
+
+  recognition.start();
+}
+</script>
+
+</body>
+</html>
